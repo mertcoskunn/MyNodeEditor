@@ -13,5 +13,4 @@ public:
 
 private:
     double zoomFactor = 1.5f;
-
 };
