@@ -9,6 +9,7 @@ SOURCES += \
     src/editor/NodeEditorScene.cpp \
     src/editor/NodeEditorView.cpp \
     src/nodes/Node.cpp \
+    src/nodes/Pin.cpp \
    
         
     
@@ -18,6 +19,7 @@ HEADERS += \
     src/editor/NodeEditorScene.h \
     src/editor/NodeEditorView.h \
     src/nodes/Node.h \
+    src/nodes/Pin.h \
 
 CONFIG += console
 
