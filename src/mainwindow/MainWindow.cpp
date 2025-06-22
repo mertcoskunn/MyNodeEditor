@@ -1,14 +1,13 @@
 #include "MainWindow.h"
 #include "../editor/NodeEditorScene.h"
-#include <QGraphicsView> 
-
+#include "../editor/NodeEditorView.h"
 
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     NodeEditorScene* scene = new NodeEditorScene();
-    QGraphicsView* view = new QGraphicsView;
+    NodeEditorView* view = new NodeEditorView;
 
     view->setScene(scene);
     setCentralWidget(view);
