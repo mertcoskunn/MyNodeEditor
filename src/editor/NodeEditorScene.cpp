@@ -1,5 +1,6 @@
 #include "NodeEditorScene.h"
 #include <QDebug>
+#include "../nodes/Node.h"
 
 
 NodeEditorScene::NodeEditorScene(QObject* parent)
@@ -22,6 +23,11 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 
         if(selected == addNode)
         {
+            Node* node = new Node();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
             qDebug() << "New node added"; 
         }
 
