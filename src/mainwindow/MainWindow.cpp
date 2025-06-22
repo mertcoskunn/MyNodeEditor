@@ -1,5 +1,5 @@
 #include "MainWindow.h"
-#include <QGraphicsScene>
+#include "../editor/NodeEditorScene.h"
 #include <QGraphicsView> 
 
 
@@ -7,7 +7,7 @@
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-    QGraphicsScene* scene = new QGraphicsScene();
+    NodeEditorScene* scene = new NodeEditorScene();
     QGraphicsView* view = new QGraphicsView;
 
     view->setScene(scene);
