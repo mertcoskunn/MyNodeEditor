@@ -1,14 +1,14 @@
 #pragma once
 
-#include <QMainWindow> 
+#include <QMainWindow>
 
-class NodeEditorView;
-class QGraphicsScene; 
-
+class QGraphicsScene;
+class QGraphicsView; 
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-    public: 
-        MainWindow(QWidget* parent = nullptr); 
+
+    public:
+        MainWindow(QWidget* parent = nullptr);
 };

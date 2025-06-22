@@ -1,20 +1,15 @@
 #include "MainWindow.h"
-#include "../editor/NodeEditorView.h"
 #include <QGraphicsScene>
-#include <QDockWidget>
-#include <QListWidget>
-#include <QHBoxLayout> 
+#include <QGraphicsView> 
 
 
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-    QGraphicsScene* scene =  new QGraphicsScene(this);
-    scene->setSceneRect(-5000, -5000, 10000, 10000);
+    QGraphicsScene* scene = new QGraphicsScene();
+    QGraphicsView* view = new QGraphicsView;
 
-    NodeEditorView* view = new NodeEditorView;
-    view->setScene(scene); 
-
-    setCentralWidget(view); 
+    view->setScene(scene);
+    setCentralWidget(view);
 }
