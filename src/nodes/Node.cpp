@@ -6,18 +6,20 @@ Node::Node() : nodeColor("#471396")
     setFlags(ItemIsMovable | ItemIsSelectable);
     setAcceptHoverEvents(true);
 
-    Pin* inputPin = new Pin(this);
-    QRectF inputRect = boundingRect();
-    QPointF leftCenter(inputRect.left(), inputRect.center().y());
-    leftCenter.setX((inputPin->getWidth()/2) + leftCenter.x());
-    inputPin->setPos(leftCenter);
+    QRectF rect = boundingRect();
+    Pin* inputPin = new Pin(Pin::PinType::Exectution, Pin::Direction::Input, this);
+    
+    QPointF leftUpperCorner(rect.left(), rect.center().y() - rect.height()/2);
+    leftUpperCorner.setX((inputPin->getWidth()/2) + leftUpperCorner.x());
+    leftUpperCorner.setY((inputPin->getHeight()/2) + leftUpperCorner.y());
+    inputPin->setPos(leftUpperCorner);
     inputExecPin = inputPin;
 
-    Pin* outputPin = new Pin(this);
-    QRectF outputRect = boundingRect();
-    QPointF rightCenter(outputRect.right(), outputRect.center().y());
-    rightCenter.setX(rightCenter.x() - (outputPin->getWidth()/2));
-    outputPin->setPos(rightCenter);
+    Pin* outputPin = new Pin(Pin::PinType::Exectution, Pin::Direction::Output, this);
+    QPointF rightUpperCorner(rect.right(), rect.center().y() - rect.height()/2);
+    rightUpperCorner.setX(rightUpperCorner.x() - (outputPin->getWidth()/2));
+    rightUpperCorner.setY((outputPin->getHeight()/2) + rightUpperCorner.y());
+    outputPin->setPos(rightUpperCorner);
     outputExecPin = outputPin;
 
 }

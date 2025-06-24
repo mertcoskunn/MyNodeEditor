@@ -13,7 +13,7 @@ public:
 
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
-
+    //virtual void execute() = 0;
 
 private:
     QColor nodeColor;
