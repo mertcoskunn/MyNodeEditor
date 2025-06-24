@@ -2,11 +2,11 @@
 #include <QDebug>
 
 
-Pin::Pin(int type, QGraphicsItem* parent)
-    :QGraphicsItem(parent)
+Pin::Pin(PinType type, Direction direction, QGraphicsItem* parent)
+    :QGraphicsObject(parent), m_pinType(type), m_direction(direction)
 {
     drawTrianglePin();
-    pinType = type;
+   
     pinColor = Qt::cyan;
     setAcceptHoverEvents(true); 
 }
@@ -98,8 +98,11 @@ void Pin::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
         if(tempPin->parentItem() == this->parentItem())
             continue;
+        
+        if(tempPin->getPinType() != m_pinType)
+            continue;
 
-        if(tempPin->getPinType() == pinType)
+        if(tempPin->getDirection() == m_direction)
             continue;
 
         ConnectionLine* line = new ConnectionLine(this, tempPin);

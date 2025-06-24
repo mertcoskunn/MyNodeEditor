@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QPainter>
 #include <QPolygonF>
 #include <QColor>
@@ -8,20 +9,31 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsLineItem>
+#include <QObject>
 #include "ConnectionLine.h"
 
-class Pin: public  QGraphicsItem
+class Pin: public  QGraphicsObject
 {
+    Q_OBJECT
 public:
     enum { Type = UserType + 1 };
+    enum class Direction { Input, Output};
+    Q_ENUM(Direction)
 
-    Pin(int type, QGraphicsItem* parent = nullptr);
+    enum class PinType { Exectution, Data};
+    Q_ENUM(PinType)
+
+    Pin( PinType type, Direction direction, QGraphicsItem* parent = nullptr );
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
     float getWidth(){ return width; };
     float getHeight(){ return height; };
-    int getPinType(){ return pinType; };
+    //int getPinType(){ return pinType; };
+    //PinType get
+    Direction getDirection(){ return m_direction; };
+    PinType getPinType(){ return m_pinType; }; 
+
     ConnectionLine* getLine(){ return connectionLine; };
     void setLine(ConnectionLine* line){ connectionLine = line; }; 
     QPointF getTriangleCenter() const;
@@ -47,6 +59,7 @@ private:
     void drawTrianglePin();
     void drawCirclePin(); 
 
-    int pinType = 0; //0 input, 1 output;
+    Direction m_direction;
+    PinType m_pinType; 
 
 };
