@@ -10,6 +10,7 @@ SOURCES += \
     src/editor/NodeEditorView.cpp \
     src/nodes/Node.cpp \
     src/nodes/Pin.cpp \
+    src/nodes/ConnectionLine.cpp \
    
         
     
@@ -20,6 +21,7 @@ HEADERS += \
     src/editor/NodeEditorView.h \
     src/nodes/Node.h \
     src/nodes/Pin.h \
+    src/nodes/ConnectionLine.h \
 
 CONFIG += console
 
