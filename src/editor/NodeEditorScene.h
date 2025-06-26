@@ -4,6 +4,8 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
+class Node; 
+
 class NodeEditorScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -16,5 +18,6 @@ protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
 
 private:
-    int numberOfNode; 
+    int numberOfNode;
+    Node* startNode; 
 };
