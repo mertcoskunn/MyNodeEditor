@@ -6,7 +6,6 @@ Pin::Pin(PinType type, Direction direction, QGraphicsItem* parent)
     :QGraphicsObject(parent), m_pinType(type), m_direction(direction)
 {
     drawTrianglePin();
-   
     pinColor = Qt::cyan;
     setAcceptHoverEvents(true); 
 }
@@ -44,6 +43,12 @@ void Pin::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 void Pin::mousePressEvent(QGraphicsSceneMouseEvent* event)
 {
     event->accept();
+
+    if(m_pinType == Pin::PinType::Exectution && connectionLine)
+    {
+        scene()->removeItem(connectionLine);  
+        connectionLine = nullptr; 
+    }
 
     QPointF startPos = mapToScene(boundingRect().center());
 
@@ -107,9 +112,17 @@ void Pin::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
 
         ConnectionLine* line = new ConnectionLine(this, tempPin);
                     
+        if(tempPin->getLine())
+            scene()->removeItem(tempPin->getLine());
+            tempPin->setLine(nullptr);
+        
         setLine(line);
+        tempPin->setLine(line);
         scene()->addItem(line); 
         scene()->removeItem(tempLine);
+
+        
+
         delete tempLine;
         tempLine = nullptr;
         temp = true;
@@ -130,4 +143,3 @@ void Pin::drawTrianglePin()
                << QPointF(-width/2, -height/2)
                << QPointF(-width/2, height/2);
 }
-

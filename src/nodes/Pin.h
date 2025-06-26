@@ -11,6 +11,7 @@
 #include <QGraphicsLineItem>
 #include <QObject>
 #include "ConnectionLine.h"
+#include "Node.h"
 
 class Pin: public  QGraphicsObject
 {
@@ -20,6 +21,7 @@ public:
     enum class Direction { Input, Output};
     Q_ENUM(Direction)
 
+    // burası opsiyonel olabilirr
     enum class PinType { Exectution, Data};
     Q_ENUM(PinType)
 
@@ -27,18 +29,27 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
+
     float getWidth(){ return width; };
     float getHeight(){ return height; };
-    //int getPinType(){ return pinType; };
-    //PinType get
+   
+    
+    
     Direction getDirection(){ return m_direction; };
-    PinType getPinType(){ return m_pinType; }; 
-
-    ConnectionLine* getLine(){ return connectionLine; };
+    PinType getPinType(){ return m_pinType; };
     void setLine(ConnectionLine* line){ connectionLine = line; }; 
+    ConnectionLine* getLine(){ return connectionLine; };
+    int type() const override { return Type; }; 
+    
+    //data pine özel
+    float getValue(){ return value; };
+    void setValue(float v){ value = v; }; 
+
+    
+    
     QPointF getTriangleCenter() const;
 
-    int type() const override { return Type; }; 
+    
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
@@ -53,13 +64,16 @@ private:
     float width = 20.0;
     float height = 20.0;
 
+    float value = 3.0f; 
+
     ConnectionLine* connectionLine = nullptr;
     QGraphicsLineItem* tempLine = nullptr;
 
     void drawTrianglePin();
-    void drawCirclePin(); 
 
     Direction m_direction;
-    PinType m_pinType; 
+    PinType m_pinType;
+
+    
 
 };
