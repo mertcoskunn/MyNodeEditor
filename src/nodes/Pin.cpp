@@ -1,31 +1,13 @@
 #include "Pin.h"
 #include <QDebug>
+#include "ConnectionLine.h"
 
 
 Pin::Pin(PinType type, Direction direction, QGraphicsItem* parent)
     :QGraphicsObject(parent), m_pinType(type), m_direction(direction)
 {
-    drawTrianglePin();
     pinColor = Qt::cyan;
     setAcceptHoverEvents(true); 
-}
-
-QRectF Pin::boundingRect() const
-{
-    return pinPolygon.boundingRect();
-}
-
-void Pin::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
-{
-        painter->setBrush(pinColor);
-        painter->setPen(Qt::black);
-        painter->drawPolygon(pinPolygon);
-}
-
-QPointF Pin::getTriangleCenter() const
-{
-    if (pinPolygon.size() != 3) return QPointF(0, 0);
-    return (pinPolygon[0] + pinPolygon[1] + pinPolygon[2]) / 3.0;
 }
 
 void Pin::hoverEnterEvent(QGraphicsSceneHoverEvent *) 
@@ -137,9 +119,3 @@ void Pin::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-void Pin::drawTrianglePin()
-{
-    pinPolygon << QPointF(width/2,0)
-               << QPointF(-width/2, -height/2)
-               << QPointF(-width/2, height/2);
-}

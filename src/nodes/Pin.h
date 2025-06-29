@@ -10,8 +10,8 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsLineItem>
 #include <QObject>
-#include "ConnectionLine.h"
-#include "Node.h"
+
+class ConnectionLine;
 
 class Pin: public  QGraphicsObject
 {
@@ -26,28 +26,15 @@ public:
     Q_ENUM(PinType)
 
     Pin( PinType type, Direction direction, QGraphicsItem* parent = nullptr );
-    QRectF boundingRect() const override;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
+    virtual QRectF boundingRect() const override = 0;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override = 0;
 
-
-    float getWidth(){ return width; };
-    float getHeight(){ return height; };
-   
-    
-    
     Direction getDirection(){ return m_direction; };
     PinType getPinType(){ return m_pinType; };
     void setLine(ConnectionLine* line){ connectionLine = line; }; 
     ConnectionLine* getLine(){ return connectionLine; };
     int type() const override { return Type; }; 
     
-    //data pine özel
-    float getValue(){ return value; };
-    void setValue(float v){ value = v; }; 
-
-    
-    
-    QPointF getTriangleCenter() const;
 
     
 
@@ -58,22 +45,13 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 
-private:
-    QPolygonF pinPolygon;
-    QColor pinColor;
-    float width = 20.0;
-    float height = 20.0;
-
-    float value = 3.0f; 
-
-    ConnectionLine* connectionLine = nullptr;
-    QGraphicsLineItem* tempLine = nullptr;
-
-    void drawTrianglePin();
-
-    Direction m_direction;
     PinType m_pinType;
-
+    Direction m_direction;
     
 
+private:
+    QColor pinColor;
+    
+    ConnectionLine* connectionLine = nullptr;
+    QGraphicsLineItem* tempLine = nullptr;
 };
