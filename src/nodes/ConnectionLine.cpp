@@ -16,8 +16,8 @@ ConnectionLine::ConnectionLine(Pin* from, Pin* to)
 void ConnectionLine::updateLine() {
     if (startPin && endPin) {
         
-        QPointF p1 = startPin->mapToScene(startPin->getTriangleCenter());
-        QPointF p2 = endPin->mapToScene(endPin->getTriangleCenter());
+        QPointF p1 = startPin->mapToScene(startPin->boundingRect().center());
+        QPointF p2 = endPin->mapToScene(endPin->boundingRect().center());
         
         setLine(QLineF(p1, p2));
     }
