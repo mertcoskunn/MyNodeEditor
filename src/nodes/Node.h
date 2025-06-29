@@ -4,6 +4,9 @@
 #include <QPainter>
 #include <QString>
 #include "Pin.h"
+#include "nodetypes/DataPin.h"
+#include "nodetypes/ExecutionPin.h"
+
 
 
 
@@ -22,14 +25,16 @@ public:
 
     void execute(); 
 
-    Pin* getOutputExecutionPin(){return outputExecPin;};
+    ExecutionPin* getInputExecutionPin(){return inputExecPin;};
+    ExecutionPin* getOutputExecutionPin(){return outputExecPin;};
+    
     //virtual void execute() = 0;
 
 private:
     QColor nodeColor;
-    Pin* inputExecPin;
-    Pin* outputExecPin;
+    ExecutionPin* inputExecPin;
+    ExecutionPin* outputExecPin;
 
-    std::vector<Pin*> inputPins;
-    std::vector<Pin*> outputPins;
+    std::vector<DataPin*> inputPins;
+    std::vector<DataPin*> outputPins;
 };
