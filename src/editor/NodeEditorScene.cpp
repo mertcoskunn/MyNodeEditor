@@ -1,6 +1,7 @@
 #include "NodeEditorScene.h"
 #include <QDebug>
 #include "../nodes/Node.h"
+#include "../nodes/ConnectionLine.h"  
 
 NodeEditorScene::NodeEditorScene(QObject* parent)
     : QGraphicsScene(parent)
