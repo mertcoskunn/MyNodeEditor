@@ -11,6 +11,8 @@ SOURCES += \
     src/nodes/Node.cpp \
     src/nodes/Pin.cpp \
     src/nodes/ConnectionLine.cpp \
+    src/nodes/nodetypes/DataPin.cpp \
+    src/nodes/nodetypes/ExecutionPin.cpp \
    
         
     
@@ -22,6 +24,8 @@ HEADERS += \
     src/nodes/Node.h \
     src/nodes/Pin.h \
     src/nodes/ConnectionLine.h \
+    src/nodes/nodetypes/DataPin.h \
+    src/nodes/nodetypes/ExecutionPin.h \
 
 CONFIG += console
 
