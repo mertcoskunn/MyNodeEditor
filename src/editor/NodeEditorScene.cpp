@@ -1,6 +1,10 @@
 #include "NodeEditorScene.h"
 #include <QDebug>
-#include "../nodes/Node.h"
+#include "../nodes/Node.h"  
+#include "../nodes/nodetypes/SumNode.h"
+#include "../nodes/nodetypes/PrintNode.h"
+#include "../nodes/nodetypes/StartNode.h"
+#include "../nodes/nodetypes/ConstantNode.h"
 #include "../nodes/ConnectionLine.h"  
 
 NodeEditorScene::NodeEditorScene(QObject* parent)
@@ -8,7 +12,11 @@ NodeEditorScene::NodeEditorScene(QObject* parent)
 {
     setSceneRect(-5000, -5000, 10000, 10000);
 
-    Node* node = new Node();
+    //Node* node = new Node();
+    //startNode = node; 
+    //addItem(node);
+
+    StartNode* node = new StartNode();
     startNode = node; 
     addItem(node);
 }
@@ -21,14 +29,36 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     if(!itemAt(event->scenePos(), QTransform()))
     {
         QMenu menu;
-        QAction *addNode = menu.addAction("Add New Node");
+        QAction *addSumNode = menu.addAction("Add Sum Node");
+        QAction *addPrintNode = menu.addAction("Add Print Node");
+        QAction *addConstant = menu.addAction("Add Constant");
         QAction *run = menu.addAction("Run");
 
         QAction *selected = menu.exec(event->screenPos());
 
-        if(selected == addNode)
+        if(selected == addSumNode)
         {
-            Node* node = new Node();
+            SumNode* node = new SumNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addPrintNode)
+        {
+            PrintNode* node = new PrintNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addConstant)
+        {
+            ConstantNode* node = new ConstantNode();
             node->setPos(event->scenePos());
             addItem(node);
 
@@ -41,10 +71,12 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             Node* tempNode = startNode;
 
             while (tempNode) {
+
+                tempNode->execute();
                 
                 Pin* outPin = tempNode->getOutputExecutionPin();
                 if (!outPin) break;
-                
+
                 ConnectionLine* line = outPin->getLine();
                 if (!line) break;
 
@@ -54,15 +86,11 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
                 QGraphicsItem* parent = nextPin->parentItem();
                 if (!parent) break;
 
-               
                 Node* nextNode = dynamic_cast<Node*>(parent);
                 if (!nextNode) break;
-
-                tempNode->execute();
                 tempNode = nextNode;
                 
                 }
          }
         }
-
 }

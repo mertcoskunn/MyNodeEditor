@@ -4,7 +4,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
-class Node; 
+class StartNode; 
 
 class NodeEditorScene : public QGraphicsScene
 {
@@ -19,5 +19,5 @@ protected:
 
 private:
     int numberOfNode;
-    Node* startNode; 
+    StartNode* startNode; 
 };
