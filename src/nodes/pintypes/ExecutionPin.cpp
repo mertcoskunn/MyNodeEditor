@@ -2,7 +2,7 @@
 
 
 ExecutionPin::ExecutionPin(Pin::Direction direction, QGraphicsItem* parent)
-    : Pin(Pin::PinType::Exectution, direction, parent)
+    : Pin(Pin::PinType::Exectution, direction, parent), pinColor("#FFFFFF")
 {
    
 }
@@ -13,7 +13,7 @@ void ExecutionPin::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
         triangle << QPointF(10, 0)
                  << QPointF(-10, -10)
                  << QPointF(-10, 10);
-        painter->setBrush(Qt::darkGreen);
+        painter->setBrush(pinColor);
         painter->drawPolygon(triangle);
 }
 
