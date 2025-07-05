@@ -19,6 +19,9 @@ public:
 public slots:
     void updateLine();
 
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent* event) override;
+
 private:
     Pin* startPin = nullptr;
     Pin* endPin = nullptr;
