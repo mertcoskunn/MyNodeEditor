@@ -12,6 +12,7 @@
 #include <QObject>
 
 class ConnectionLine;
+class Node; 
 
 class Pin: public  QGraphicsObject
 {
@@ -29,12 +30,13 @@ public:
     virtual QRectF boundingRect() const override = 0;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override = 0;
 
+
     Direction getDirection(){ return m_direction; };
     PinType getPinType(){ return m_pinType; };
-    void setLine(ConnectionLine* line){ connectionLine = line; }; 
+    virtual void setLine(ConnectionLine* line){ connectionLine = line; }; 
     ConnectionLine* getLine(){ return connectionLine; };
     int type() const override { return Type; }; 
-    
+    Node* getOwner(){return owner;};
 
     
 
@@ -54,4 +56,5 @@ private:
     
     ConnectionLine* connectionLine = nullptr;
     QGraphicsLineItem* tempLine = nullptr;
+    Node* owner = nullptr; 
 };

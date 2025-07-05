@@ -1,13 +1,15 @@
 #include "Pin.h"
 #include <QDebug>
 #include "ConnectionLine.h"
-
+#include "pintypes/DataPin.h"
+#include "Node.h"
 
 Pin::Pin(PinType type, Direction direction, QGraphicsItem* parent)
     :QGraphicsObject(parent), m_pinType(type), m_direction(direction)
 {
     pinColor = Qt::cyan;
-    setAcceptHoverEvents(true); 
+    setAcceptHoverEvents(true);
+    owner = dynamic_cast<Node*>(parent); 
 }
 
 void Pin::hoverEnterEvent(QGraphicsSceneHoverEvent *) 
@@ -92,12 +94,34 @@ void Pin::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
         if(tempPin->getDirection() == m_direction)
             continue;
 
-        ConnectionLine* line = new ConnectionLine(this, tempPin);
+        if(m_pinType == PinType::Data)
+        {
+            DataPin* thisDataPin = dynamic_cast<DataPin*>(this);
+            DataPin* otherDataPin = dynamic_cast<DataPin*>(tempPin);
+
+            if (!thisDataPin || !otherDataPin)
+                continue;
+
+            if (thisDataPin->getDataType() != otherDataPin->getDataType())
+                continue;
+        }
+            
+        Pin *from;
+        Pin *to;
+        if(getDirection() == Direction::Output)
+        {
+            from = this;
+            to = tempPin;
+        }else{
+            from = tempPin;
+            to = this; 
+        }
+        ConnectionLine* line = new ConnectionLine(from, to);
                     
-        if(tempPin->getLine())
+        if(tempPin->getLine() && tempPin->getDirection() == Direction::Input){
             scene()->removeItem(tempPin->getLine());
             tempPin->setLine(nullptr);
-        
+        }
         setLine(line);
         tempPin->setLine(line);
         scene()->addItem(line); 
