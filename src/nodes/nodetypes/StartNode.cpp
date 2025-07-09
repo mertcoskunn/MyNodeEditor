@@ -16,7 +16,7 @@ void StartNode::setupPins()
 }
 
 
-void StartNode::execute()
+void StartNode::executeImpl()
 {
     
 }

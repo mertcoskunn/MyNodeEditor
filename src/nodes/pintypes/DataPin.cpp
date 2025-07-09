@@ -66,9 +66,10 @@ void DataPin::setupInputBox()
 }
 
 void DataPin::setValue(const VariantType& v){
-    qDebug() << "set Value fonksiyonu çalıştı"; 
-    isSet = true; 
     value = v;
+
+    if(getDirection() == Direction::Input)
+        getOwner()->setDirty(true);
 }
 
 
@@ -113,7 +114,7 @@ DataPin::VariantType DataPin::getValue(){
         return value;
         }
     if(getDirection() == Direction::Output){
-        if(isSet){
+        if(!getOwner()->isDirty()){
             qDebug()<<"is set true";
             return value;
         }
@@ -123,6 +124,6 @@ DataPin::VariantType DataPin::getValue(){
     }
     qDebug()<<"direction input";
     
-    
+
     return dynamic_cast<DataPin*>(getLine()->getStartPin())->getValue();  
 }

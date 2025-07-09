@@ -10,7 +10,9 @@ public:
     SumNode();
 
     void setupPins() override;
-    void execute() override; 
-    QString getNodeName() const override { return "Sum"; }; 
+    QString getNodeName() const override { return "Sum"; };
+
+protected:
+    void executeImpl() override;
 
 };

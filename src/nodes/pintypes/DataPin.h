@@ -25,7 +25,6 @@ public :
     QString getName(){ return pinName; };
     
     void setLine(ConnectionLine* line) override; 
-    bool isSet = false; 
 private:
     DataType dataType;
     VariantType value;

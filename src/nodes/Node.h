@@ -22,17 +22,22 @@ public:
     ExecutionPin* getOutputExecutionPin(){return outputExecPin;};
 
     virtual void setupPins() = 0; 
-    virtual void execute() {return;};
+    void execute() {executeImpl(); setDirty(false);};
     virtual QString getNodeName() const { return "" ;};
     virtual void setNodeColor() const {return;};
-    virtual void setHeaderColor() const {return;}; 
+    virtual void setHeaderColor() const {return;};
 
+    bool isDirty() const {return dirty;};
+    void setDirty(bool val) {dirty = val;};
+     
 protected:
     void addInputExecutionPin();
     void addOutputExecutionPin();
     void addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
     void addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
-    void drawHeader(); 
+    void drawHeader();
+    
+    virtual void executeImpl() = 0;
 
     std::vector<DataPin*> inputPins;
     std::vector<DataPin*> outputPins;
@@ -45,4 +50,6 @@ private:
 
     float minHeaderHeight = 20.0f;
     float minBodyHeight = 80.0f;
+
+    bool dirty = true; 
 };

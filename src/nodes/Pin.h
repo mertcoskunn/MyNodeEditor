@@ -38,8 +38,6 @@ public:
     int type() const override { return Type; }; 
     Node* getOwner(){return owner;};
 
-    
-
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override;

@@ -9,10 +9,12 @@ class ConstantNode : public Node
 {
 public: 
     ConstantNode();
-
+    
     void setupPins() override;
-    void execute() override;
     QString getNodeName() const override { return "Constant"; };
+
+protected:
+    void executeImpl() override;
 
 private:    
     void setupInputBox();

@@ -9,6 +9,8 @@ public:
     PrintNode();
 
     void setupPins() override;
-    void execute() override;
-    QString getNodeName() const override { return "Print"; }; 
+    QString getNodeName() const override { return "Print"; };
+
+protected:
+    void executeImpl() override;
 };

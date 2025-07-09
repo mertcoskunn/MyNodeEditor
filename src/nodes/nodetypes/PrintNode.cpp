@@ -26,7 +26,7 @@ void PrintNode::setupPins()
 }
 
 
-void PrintNode::execute()
+void PrintNode::executeImpl()
 {
     auto val1 = inputPins[0]->getValue();
    

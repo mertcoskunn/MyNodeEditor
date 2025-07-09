@@ -36,7 +36,7 @@ void SumNode::setupPins()
     addOutputPins(outputNames, outputTypes); 
 }
 
-void SumNode::execute()
+void SumNode::executeImpl()
 {
     auto val1 = inputPins[0]->getValue();
     auto val2 = inputPins[1]->getValue();
