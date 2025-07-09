@@ -20,6 +20,7 @@ SOURCES += \
     src/nodes/nodetypes/PrintNode.cpp \
     src/nodes/nodetypes/StartNode.cpp \
     src/nodes/nodetypes/ConstantNode.cpp \
+    src/nodes/nodetypes/BranchNode.cpp \
    
         
     
@@ -41,6 +42,7 @@ HEADERS += \
     src/nodes/nodetypes/PrintNode.h \
     src/nodes/nodetypes/StartNode.h \
     src/nodes/nodetypes/ConstantNode.h \
+    src/nodes/nodetypes/BranchNode.h \
 
 CONFIG += console
 

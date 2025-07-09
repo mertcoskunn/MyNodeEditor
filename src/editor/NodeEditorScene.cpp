@@ -4,6 +4,7 @@
 #include "../nodes/nodetypes/PrintNode.h"
 #include "../nodes/nodetypes/StartNode.h"
 #include "../nodes/nodetypes/ConstantNode.h"
+#include "../nodes/nodetypes/BranchNode.h"
 #include "../nodes/nodetypes/math/SumNode.h"
 #include "../nodes/nodetypes/math/DivisionNode.h"
 #include "../nodes/nodetypes/math/MultiplyNode.h"
@@ -36,6 +37,7 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QAction *addDivisionNode = menu.addAction("Add Division Node");
         QAction *addSubtractionNode = menu.addAction("Add Subtraction Node");
         QAction *addMultiplicationNode = menu.addAction("Add Multiplication Node");
+        QAction *addBranchNode = menu.addAction("Add Branch Node");
         QAction *addPrintNode = menu.addAction("Add Print Node");
         QAction *addConstant = menu.addAction("Add Constant");
         QAction *run = menu.addAction("Run");
@@ -75,6 +77,16 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         if(selected == addMultiplicationNode)
         {
             MultiplyNode* node = new MultiplyNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addBranchNode)
+        {
+            BranchNode* node = new BranchNode();
             node->setPos(event->scenePos());
             addItem(node);
 

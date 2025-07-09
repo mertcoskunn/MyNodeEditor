@@ -7,6 +7,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <variant>
 #include <QLineEdit>
+#include <QCheckBox>
 #include <QGraphicsProxyWidget>
 
 class DataPin : public Pin

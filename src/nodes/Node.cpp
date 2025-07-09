@@ -1,6 +1,7 @@
 #include "Node.h"
 #include <QDebug>
 #include "ConnectionLine.h"
+#include "../core/DataType.h"
 
 Node::Node() : nodeColor("#09122C"), headerColor("#872341")
 {
@@ -34,27 +35,28 @@ void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
     painter->drawText(headerRect, Qt::AlignCenter, getNodeName());
 }
 
-void Node::addInputExecutionPin()
+void Node::addInputExecutionPin(int n)
 {
-    QRectF rect = boundingRect();
     ExecutionPin* inputPin = new ExecutionPin(Pin::Direction::Input, this);
     
-    QPointF leftUpperCorner(rect.left(), rect.center().y() - rect.height()/2);
-    leftUpperCorner.setX((inputPin->boundingRect().width()/2) + leftUpperCorner.x());
-    leftUpperCorner.setY((inputPin->boundingRect().height()/2) + leftUpperCorner.y() + minHeaderHeight + 3);
-    inputPin->setPos(leftUpperCorner);
+    inputPin->setPos(getFirstInputPinPos());
+    lastInputPinPos = getFirstInputPinPos(); 
     inputExecPin = inputPin;
 }
 
-void Node::addOutputExecutionPin()
+void Node::addOutputExecutionPin(int n )
 {
-    QRectF rect = boundingRect();
-    ExecutionPin* outputPin = new ExecutionPin(Pin::Direction::Output, this);
-    QPointF rightUpperCorner(rect.right(), rect.center().y() - rect.height()/2);
-    rightUpperCorner.setX(rightUpperCorner.x() - (outputPin->boundingRect().width()/2));
-    rightUpperCorner.setY((outputPin->boundingRect().height()/2) + rightUpperCorner.y() + minHeaderHeight + 3);
-    outputPin->setPos(rightUpperCorner);
-    outputExecPin = outputPin;
+    lastOutputPinPos = getFirstOutputPinPos();
+
+    for(int i=0; i<n; i++){
+        ExecutionPin* outputPin = new ExecutionPin(Pin::Direction::Output, this);
+        
+        outputPin->setPos(lastOutputPinPos);
+        lastOutputPinPos.setY(lastOutputPinPos.y() + 3 + (outputPin->boundingRect().height()));
+        outputExecPin = outputPin; 
+        outputExecutionPins.push_back(outputPin); 
+    }
+    
 }
 
 void Node::addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types)
@@ -62,7 +64,7 @@ void Node::addInputPins(const std::vector<QString>& names, const std::vector<Dat
     const int spacing = 20;
     QRectF rect = boundingRect();
     
-    QPointF startPos;
+    QPointF startPos = lastInputPinPos;
     if (inputExecPin) {
         
         startPos = inputExecPin->pos();
@@ -78,12 +80,19 @@ void Node::addInputPins(const std::vector<QString>& names, const std::vector<Dat
 
     for (int i = 0; i < types.size(); ++i)
     {
-        DataPin* pin = new DataPin(names[i], types[i], 5.0f, Pin::Direction::Input, this);        
-        qreal x = startPos.x();
-        qreal y = startPos.y() + i * spacing;
+        DataPin *pin; 
+        if(types[i] == DataType::Boolean){
+            pin = new DataPin(names[i], types[i], false, Pin::Direction::Input, this);
+        }else{
+            pin = new DataPin(names[i], types[i], 5.0f, Pin::Direction::Input, this);
+        }
+        
+        qreal x = lastInputPinPos.x();
+        qreal y = lastInputPinPos.y() + spacing;
 
         pin->setPos(x, y);
         inputPins.push_back(pin);
+        lastInputPinPos = QPointF(x, y);
 
         QGraphicsTextItem* label = new QGraphicsTextItem(names[i], this);
         label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
@@ -97,29 +106,23 @@ void Node::addOutputPins(const std::vector<QString>& names, const std::vector<Da
     const int spacing = 20;
     QRectF rect = boundingRect();
 
-    QPointF startPos;
-    if (outputExecPin) {
-        startPos = outputExecPin->pos();
-        startPos.setY(startPos.y() + outputExecPin->boundingRect().height() + 5);
-    } else {
-        startPos = QPointF(rect.right(), rect.top());
-        startPos.setX(startPos.x() - 10); 
-        startPos.setY(startPos.y() + minHeaderHeight + 10); 
+    
+    if (!outputExecPin) {
+        lastOutputPinPos = getFirstOutputPinPos();
     }
 
     for (int i = 0; i < types.size(); ++i)
     {
         DataPin* pin = new DataPin(names[i], types[i], 0.0f, Pin::Direction::Output, this);        
-        qreal x = startPos.x();
-        qreal y = startPos.y() + i * spacing;
+        lastOutputPinPos.setY(lastOutputPinPos.y() + spacing);
 
-        pin->setPos(x, y);
+        pin->setPos(lastOutputPinPos);
         outputPins.push_back(pin);
 
         QGraphicsTextItem* label = new QGraphicsTextItem(names[i], this);
         label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
         label->setDefaultTextColor(Qt::white); 
-        label->setPos(x - pin->boundingRect().width() - label->boundingRect().width(), y - label->boundingRect().height() / 2);
+        label->setPos(lastOutputPinPos.x() - pin->boundingRect().width() - label->boundingRect().width(), lastOutputPinPos.y() - label->boundingRect().height() / 2);
     }
 }
 
@@ -129,6 +132,23 @@ void Node::drawHeader()
     getNodeName(); 
 }
 
- 
-    
+QPointF Node::getFirstInputPinPos()
+{
+    QRectF rect = boundingRect();
+    QPointF leftUpperCorner(rect.left(), rect.center().y() - rect.height()/2);
+    leftUpperCorner.setX(10 + leftUpperCorner.x());
+    leftUpperCorner.setY(10 + leftUpperCorner.y() + minHeaderHeight + 3);
+
+    return leftUpperCorner;
+}
+
+QPointF Node::getFirstOutputPinPos()
+{
+    QRectF rect = boundingRect();
+    QPointF rightUpperCorner(rect.right(), rect.center().y() - rect.height()/2);
+    rightUpperCorner.setX(rightUpperCorner.x() - 10);
+    rightUpperCorner.setY(10 + rightUpperCorner.y() + minHeaderHeight + 3);
+
+    return rightUpperCorner;
+}
 

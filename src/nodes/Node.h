@@ -20,6 +20,7 @@ public:
 
     ExecutionPin* getInputExecutionPin(){return inputExecPin;};
     ExecutionPin* getOutputExecutionPin(){return outputExecPin;};
+    void setActiveOutputExecutionPin(ExecutionPin* pin){ outputExecPin = pin; }; 
 
     virtual void setupPins() = 0; 
     void execute() {executeImpl(); setDirty(false);};
@@ -29,15 +30,24 @@ public:
 
     bool isDirty() const {return dirty;};
     void setDirty(bool val) {dirty = val;};
+    
      
 protected:
-    void addInputExecutionPin();
-    void addOutputExecutionPin();
+    void addInputExecutionPin(int n = 1);
+    void addOutputExecutionPin(int n = 1);
     void addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
     void addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
     void drawHeader();
     
     virtual void executeImpl() = 0;
+
+    void setActiveOutputExecnODE();
+
+    QPointF getFirstInputPinPos();
+    QPointF getFirstOutputPinPos();
+
+    std::vector<ExecutionPin*> inputExecutionPins;
+    std::vector<ExecutionPin*> outputExecutionPins;
 
     std::vector<DataPin*> inputPins;
     std::vector<DataPin*> outputPins;
@@ -51,5 +61,7 @@ private:
     float minHeaderHeight = 20.0f;
     float minBodyHeight = 80.0f;
 
+    QPointF lastInputPinPos;
+    QPointF lastOutputPinPos;
     bool dirty = true; 
 };

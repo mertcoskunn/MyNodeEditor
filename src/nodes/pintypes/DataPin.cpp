@@ -38,6 +38,21 @@ QColor DataPin::getPinColorForType(DataType type) const
 
 void DataPin::setupInputBox()
 {
+    if (getDataType() == DataType::Boolean)
+    {
+        QCheckBox* checkBox = new QCheckBox;
+        checkBox->setChecked(std::get<bool>(value));
+        checkBox->setFixedSize(15, 15);
+
+        proxy = new QGraphicsProxyWidget(this);
+        proxy->setWidget(checkBox);
+        proxy->setPos(10, -5);
+
+        QObject::connect(checkBox, &QCheckBox::stateChanged, this, [=](int state){
+            setValue(state == Qt::Checked);
+            qDebug() << "Yeni bool değer:" << (state == Qt::Checked);
+        });
+    }else{
     inputBox = new QLineEdit;
     inputBox->setFixedHeight(15);
     inputBox->setFixedWidth(25);
@@ -63,6 +78,7 @@ void DataPin::setupInputBox()
         setValue(val.toFloat()); 
         qDebug() << "Yeni değer:" << val;
     });
+}
 }
 
 void DataPin::setValue(const VariantType& v){
