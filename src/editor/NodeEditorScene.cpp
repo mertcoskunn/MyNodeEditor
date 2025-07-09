@@ -1,10 +1,13 @@
 #include "NodeEditorScene.h"
 #include <QDebug>
 #include "../nodes/Node.h"  
-#include "../nodes/nodetypes/SumNode.h"
 #include "../nodes/nodetypes/PrintNode.h"
 #include "../nodes/nodetypes/StartNode.h"
 #include "../nodes/nodetypes/ConstantNode.h"
+#include "../nodes/nodetypes/math/SumNode.h"
+#include "../nodes/nodetypes/math/DivisionNode.h"
+#include "../nodes/nodetypes/math/MultiplyNode.h"
+#include "../nodes/nodetypes/math/SubtractionNode.h"
 #include "../nodes/ConnectionLine.h"  
 
 NodeEditorScene::NodeEditorScene(QObject* parent)
@@ -30,6 +33,9 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     {
         QMenu menu;
         QAction *addSumNode = menu.addAction("Add Sum Node");
+        QAction *addDivisionNode = menu.addAction("Add Division Node");
+        QAction *addSubtractionNode = menu.addAction("Add Subtraction Node");
+        QAction *addMultiplicationNode = menu.addAction("Add Multiplication Node");
         QAction *addPrintNode = menu.addAction("Add Print Node");
         QAction *addConstant = menu.addAction("Add Constant");
         QAction *run = menu.addAction("Run");
@@ -39,6 +45,36 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         if(selected == addSumNode)
         {
             SumNode* node = new SumNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addDivisionNode)
+        {
+            DivisionNode* node = new DivisionNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addSubtractionNode)
+        {
+            SubtractionNode* node = new SubtractionNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+
+            numberOfNode++; 
+            qDebug() << "New node added"; 
+        }
+
+        if(selected == addMultiplicationNode)
+        {
+            MultiplyNode* node = new MultiplyNode();
             node->setPos(event->scenePos());
             addItem(node);
 
