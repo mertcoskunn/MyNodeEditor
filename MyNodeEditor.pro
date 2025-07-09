@@ -15,6 +15,7 @@ SOURCES += \
     src/nodes/pintypes/ExecutionPin.cpp \
     src/nodes/nodetypes/SumNode.cpp \
     src/nodes/nodetypes/MultiplyNode.cpp \
+    src/nodes/nodetypes/SubtractionNode.cpp \
     src/nodes/nodetypes/PrintNode.cpp \
     src/nodes/nodetypes/StartNode.cpp \
     src/nodes/nodetypes/ConstantNode.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     src/core/DataType.h \
     src/nodes/nodetypes/SumNode.h \
     src/nodes/nodetypes/MultiplyNode.h \
+    src/nodes/nodetypes/SubtractionNode.cpp \
     src/nodes/nodetypes/PrintNode.h \
     src/nodes/nodetypes/StartNode.h \
     src/nodes/nodetypes/ConstantNode.h \
