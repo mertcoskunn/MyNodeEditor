@@ -1,9 +1,9 @@
-#include "SumNode.h"
-#include "../ConnectionLine.h"
+#include "MultiplyNode.h"
+#include "../../ConnectionLine.h"
 
 
 
-SumNode::SumNode() : Node()
+MultiplyNode::MultiplyNode() : Node()
 {
     addInputExecutionPin();
     addOutputExecutionPin();
@@ -11,7 +11,7 @@ SumNode::SumNode() : Node()
     
 }
 
-void SumNode::setupPins()
+void MultiplyNode::setupPins()
 {
 
      std::vector<QString> inputNames = {
@@ -25,7 +25,7 @@ void SumNode::setupPins()
     };
 
     std::vector<QString> outputNames = {
-        "sum"
+        "result"
     };
 
     std::vector<DataType> outputTypes = {
@@ -36,31 +36,15 @@ void SumNode::setupPins()
     addOutputPins(outputNames, outputTypes); 
 }
 
-void SumNode::executeImpl()
+void MultiplyNode::executeImpl()
 {
     auto val1 = inputPins[0]->getValue();
     auto val2 = inputPins[1]->getValue();
    
     if (std::holds_alternative<float>(val1) && std::holds_alternative<float>(val2))
     {
-        float result = std::get<float>(val1) + std::get<float>(val2);
+        float result = std::get<float>(val1) * std::get<float>(val2);
         outputPins[0]->setValue(result);
-        qDebug() << result; 
-        qDebug() << std::get<float>(val2); 
-       /*
-        auto outPin = outputPins[0];
-        if (outPin)
-        {
-            auto line = outPin->getLine();
-            if (line)
-            {
-                Pin* nextPin = line->getNextPin();
-                if (auto tempPin = dynamic_cast<DataPin*>(nextPin))
-                {
-                    tempPin->setValue(result);
-                }
-            }
-        }
-    */
+        
     }
 }
