@@ -2,15 +2,29 @@
 #include "../ConnectionLine.h"
 #include "../Node.h"
 
-DataPin::DataPin(const QString& name, DataType type, VariantType defaultVal, Pin::Direction direction, QGraphicsItem* parent)
-    : Pin(Pin::PinType::Data, direction, parent)
+DataPin::DataPin(QString name, DataType type, VariantType defaultVal, Pin::Direction direction, QGraphicsItem* parent)
+    : Pin(name, Pin::PinType::Data, direction, parent)
 {
-    pinName = name;
+    
     dataType = type; 
     value = defaultVal;
 
-    if(getDirection() == Direction::Input)
-        setupInputBox(); 
+    if(getDirection() == Direction::Input){
+        setupInputBox();
+        QPointF pos;
+        pos.setX(proxy->pos().x() + inputWidget->width() + 3);
+        pos.setY(proxy->pos().y() - 5);
+        QGraphicsTextItem* label = drawPinName();
+        label->setPos(pos);
+    }else{
+        QGraphicsTextItem* label = drawPinName();
+        QPointF pos;
+        pos.setX(this->boundingRect().x() -  label->boundingRect().width());
+        pos.setY(this->boundingRect().y() - this->boundingRect().height()/2);
+        label->setPos(pos);
+    }
+
+
 }
 
 void DataPin::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
@@ -47,20 +61,23 @@ void DataPin::setupInputBox()
         proxy = new QGraphicsProxyWidget(this);
         proxy->setWidget(checkBox);
         proxy->setPos(10, -5);
-
+        inputWidget = checkBox;
         QObject::connect(checkBox, &QCheckBox::stateChanged, this, [=](int state){
             setValue(state == Qt::Checked);
             qDebug() << "Yeni bool değer:" << (state == Qt::Checked);
         });
     }else{
-    inputBox = new QLineEdit;
+    QLineEdit* inputBox = new QLineEdit;
     inputBox->setFixedHeight(15);
     inputBox->setFixedWidth(25);
     inputBox->setPlaceholderText("0.0");
     QFont font = inputBox->font();
     font.setPointSize(8); 
     inputBox->setFont(font);
-    inputBox->setText(toQString(value)); 
+    inputBox->setText(toQString(value));
+    
+    inputWidget = inputBox;
+    
     
     if(getDataType() == DataType::Float)
     {
@@ -68,18 +85,24 @@ void DataPin::setupInputBox()
         validator->setNotation(QDoubleValidator::StandardNotation);
         inputBox->setValidator(validator);
     }
-    
 
     proxy = new QGraphicsProxyWidget(this);
     proxy->setWidget(inputBox);
-    proxy->setPos(10, -5); 
-
+    proxy->setPos(10, -5);
+    
+    QGraphicsTextItem* label = new QGraphicsTextItem(getName(), this);
+    label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
+    label->setDefaultTextColor(Qt::white);
+    label->setPos(proxy->pos().x() + inputBox->width() + 3, proxy->pos().y() - 5 );
+    
     QObject::connect(inputBox, &QLineEdit::textChanged, [=](const QString& val){
         setValue(val.toFloat()); 
         qDebug() << "Yeni değer:" << val;
     });
 }
 }
+
+
 
 void DataPin::setValue(const VariantType& v){
     value = v;
@@ -93,7 +116,7 @@ void DataPin::setLine(ConnectionLine* line)
 {
     Pin::setLine(line);
     
-    if(inputBox){
+    if(QLineEdit* inputBox = qobject_cast<QLineEdit*>(inputWidget)){
         if(line == nullptr)
         {
             inputBox->show();
