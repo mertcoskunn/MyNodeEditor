@@ -38,14 +38,12 @@ MainWindow::MainWindow(QWidget* parent)
 void MainWindow::saveFile() {
 
     if (currentFilePath.isEmpty()) {
-        qDebug() << "sdsadasdadsad";
         currentFilePath = QFileDialog::getSaveFileName(this, "Save File", "", "JSON Files (*.json)");
         if (currentFilePath.isEmpty()) {
             return; 
         }
     }
 
-    qDebug() << currentFilePath; 
     QFile file(currentFilePath);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QTextStream out(&file);
@@ -79,7 +77,7 @@ void MainWindow::openFile() {
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(this, "Open Error", "Dosya açılamadı!");
+        QMessageBox::warning(this, "Open Error", "Open Error!");
         return;
     }
 
@@ -98,7 +96,6 @@ void MainWindow::openFile() {
             }
 
             QList<QVariantMap> nodes = JsonImporter::deserializeNodeList(doc.array());
-            qDebug() << scene->nodeList.size(); 
             for (const QVariantMap& node : nodes) {
                 QVariantMap pos = node["position"].toMap();
                 if(node["name"].toString() == "Start"){

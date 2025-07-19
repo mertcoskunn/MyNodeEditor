@@ -4,7 +4,7 @@ NodeMenuBar::NodeMenuBar(QWidget* parent)
     : QMenuBar(parent)
 {
     QMenu* fileMenu = this->addMenu("File");
-    actionOpen = new QAction("Open File", this);
+    actionOpen = new QAction("Open", this);
     actionSave = new QAction("Save", this);
     fileMenu->addAction(actionOpen);
     fileMenu->addSeparator();
