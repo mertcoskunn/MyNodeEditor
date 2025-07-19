@@ -6,8 +6,11 @@ TEMPLATE = app
 SOURCES += \
     src/main.cpp \
     src/mainwindow/MainWindow.cpp \
+    src/utils/JsonExporter.cpp \
+    src/utils/JsonImporter.cpp \
     src/editor/NodeEditorScene.cpp \
     src/editor/NodeEditorView.cpp \
+    src/editor/NodeMenuBar.cpp \
     src/nodes/Node.cpp \
     src/nodes/Pin.cpp \
     src/nodes/ConnectionLine.cpp \
@@ -27,8 +30,11 @@ SOURCES += \
 
 HEADERS += \
     src/mainwindow/MainWindow.h \
+    src/utils/JsonExporter.h \
+    src/utils/JsonImporter.h \
     src/editor/NodeEditorScene.h \
     src/editor/NodeEditorView.h \
+    src/editor/NodeMenuBar.h \
     src/nodes/Node.h \
     src/nodes/Pin.h \
     src/nodes/ConnectionLine.h \
