@@ -1,5 +1,6 @@
 #include "NodeEditorScene.h"
 #include <QDebug>
+#include "NodeEditorView.h"
 #include "../nodes/Node.h"  
 #include "../nodes/nodetypes/PrintNode.h"
 #include "../nodes/nodetypes/StartNode.h"
@@ -33,7 +34,44 @@ void NodeEditorScene::clearNodeList()
     nodeList.clear();
     this->clear();
 }
+void NodeEditorScene::mousePressEvent(QGraphicsSceneMouseEvent* event)
+{
+    if ((event->modifiers() & Qt::ControlModifier) && event->button() == Qt::LeftButton) {
+        QList<QGraphicsItem*> itemsAtClick = items(event->scenePos());
 
+        for (QGraphicsItem* item : itemsAtClick) {
+            if (dynamic_cast<ConnectionLine*>(item)) {
+                ConnectionLine* line = dynamic_cast<ConnectionLine*>(item);
+                removeItem(line);
+                delete line;
+                return; 
+            }
+
+            if(dynamic_cast<Node*>(item)){
+                Node* node = dynamic_cast<Node*>(item);
+                for(Pin* pin : node->getAllPins())
+                {
+                    ConnectionLine* line = pin->getLine();
+                    if(line){
+                        removeItem(line);
+                        delete line;
+                    }
+                }
+
+                if(dynamic_cast<StartNode*>(node))
+                    startNode = nullptr;
+
+                nodeList.erase(std::remove(nodeList.begin(), nodeList.end(), node), nodeList.end());
+                removeItem(item);
+                delete item;
+                numberOfNode --; 
+                return; 
+            }
+        }
+    }
+
+    QGraphicsScene::mousePressEvent(event);
+}
 void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     Q_UNUSED(event);
@@ -41,6 +79,7 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
     if(!itemAt(event->scenePos(), QTransform()))
     {
         QMenu menu;
+        QAction *addStartNode = menu.addAction("Add Start Node");
         QAction *addSumNode = menu.addAction("Add Sum Node");
         QAction *addDivisionNode = menu.addAction("Add Division Node");
         QAction *addSubtractionNode = menu.addAction("Add Subtraction Node");
@@ -51,6 +90,21 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
         QAction *run = menu.addAction("Run");
 
         QAction *selected = menu.exec(event->screenPos());
+
+
+        if(selected == addStartNode)
+        {
+            if(startNode){
+                QGraphicsView* view = this->views().first();
+                view->centerOn(startNode);
+                return; 
+            }
+            StartNode* node = new StartNode();
+            node->setPos(event->scenePos());
+            addItem(node);
+            startNode = node;
+            nodeList.push_back(node); 
+        }
 
         if(selected == addSumNode)
         {
