@@ -1,8 +1,8 @@
 #include "ExecutionPin.h"
 
 
-ExecutionPin::ExecutionPin(Pin::Direction direction, QGraphicsItem* parent)
-    : Pin(Pin::PinType::Exectution, direction, parent), pinColor("#FFFFFF")
+ExecutionPin::ExecutionPin(QString name, Pin::Direction direction, QGraphicsItem* parent)
+    : Pin(name, Pin::PinType::Exectution, direction, parent), pinColor("#FFFFFF")
 {
    
 }

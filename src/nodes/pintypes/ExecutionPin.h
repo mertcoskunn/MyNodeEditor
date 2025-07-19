@@ -9,7 +9,7 @@ class ExecutionPin : public Pin
 {
 
 public:
-    ExecutionPin(Pin::Direction direction, QGraphicsItem* parent = nullptr);
+    ExecutionPin(QString name, Pin::Direction direction, QGraphicsItem* parent = nullptr);
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) override;
 

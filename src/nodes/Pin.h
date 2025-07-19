@@ -26,7 +26,7 @@ public:
     enum class PinType { Exectution, Data};
     Q_ENUM(PinType)
 
-    Pin( PinType type, Direction direction, QGraphicsItem* parent = nullptr );
+    Pin(QString name, PinType type, Direction direction, QGraphicsItem* parent = nullptr );
     virtual QRectF boundingRect() const override = 0;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override = 0;
 
@@ -37,6 +37,11 @@ public:
     ConnectionLine* getLine(){ return connectionLine; };
     int type() const override { return Type; }; 
     Node* getOwner(){return owner;};
+    QString getName() const {return pinName;};
+    void setId(QString id); 
+    QString getId(){return pinId;}; 
+    
+    QGraphicsTextItem* drawPinName(); 
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
@@ -51,7 +56,8 @@ protected:
 
 private:
     QColor pinColor;
-    
+    QString pinName = "";
+    QString pinId = "";
     ConnectionLine* connectionLine = nullptr;
     QGraphicsLineItem* tempLine = nullptr;
     Node* owner = nullptr; 

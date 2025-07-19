@@ -4,9 +4,10 @@
 #include "pintypes/DataPin.h"
 #include "Node.h"
 
-Pin::Pin(PinType type, Direction direction, QGraphicsItem* parent)
+Pin::Pin(QString name, PinType type, Direction direction, QGraphicsItem* parent)
     :QGraphicsObject(parent), m_pinType(type), m_direction(direction)
 {
+    pinName = name; 
     pinColor = Qt::cyan;
     setAcceptHoverEvents(true);
     owner = dynamic_cast<Node*>(parent); 
@@ -143,3 +144,14 @@ void Pin::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
+QGraphicsTextItem* Pin::drawPinName(){
+    QGraphicsTextItem* label = new QGraphicsTextItem(getName(), this);
+    label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
+    label->setDefaultTextColor(Qt::white);
+    return label; 
+}
+
+void Pin::setId(QString id)
+{
+    pinId = id; 
+}

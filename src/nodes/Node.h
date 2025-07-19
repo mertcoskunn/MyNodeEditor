@@ -16,27 +16,35 @@ public:
     QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
 
-    //void execute(); 
 
     ExecutionPin* getInputExecutionPin(){return inputExecPin;};
     ExecutionPin* getOutputExecutionPin(){return outputExecPin;};
     void setActiveOutputExecutionPin(ExecutionPin* pin){ outputExecPin = pin; }; 
 
-    virtual void setupPins() = 0; 
+    
     void execute() {executeImpl(); setDirty(false);};
+    virtual void setupPins() = 0; 
     virtual QString getNodeName() const { return "" ;};
     virtual void setNodeColor() const {return;};
     virtual void setHeaderColor() const {return;};
 
     bool isDirty() const {return dirty;};
     void setDirty(bool val) {dirty = val;};
+
+    QPointF getPosition() const {return this->scenePos();};
+    int getId() const { return id; };
+
+    std::vector<Pin*> getAllPins() const;
+    std::vector<Pin*> getInputPins() const;
+    std::vector<Pin*> getOutputPins() const;
+
     
      
 protected:
     void addInputExecutionPin(int n = 1);
     void addOutputExecutionPin(int n = 1);
-    void addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
-    void addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types);
+    void addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types, const std::vector<DataPin::VariantType>& defaultVals);
+    void addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types, const std::vector<DataPin::VariantType>& defaultVals);
     void drawHeader();
     
     virtual void executeImpl() = 0;
@@ -53,15 +61,20 @@ protected:
     std::vector<DataPin*> outputPins;
 
 private:
+
+    static int nextId; 
+    int id;
+    
     QColor nodeColor;
     QColor headerColor; 
+    float minHeaderHeight = 20.0f;
+    float minBodyHeight = 80.0f;
+    
     ExecutionPin* inputExecPin = nullptr;
     ExecutionPin* outputExecPin = nullptr;
 
-    float minHeaderHeight = 20.0f;
-    float minBodyHeight = 80.0f;
-
     QPointF lastInputPinPos;
     QPointF lastOutputPinPos;
+    
     bool dirty = true; 
 };

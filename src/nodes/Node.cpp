@@ -3,14 +3,17 @@
 #include "ConnectionLine.h"
 #include "../core/DataType.h"
 
-Node::Node() : nodeColor("#09122C"), headerColor("#872341")
+int Node::nextId = 0;
+
+
+Node::Node() : id(nextId++), nodeColor("#09122C"), headerColor("#872341")
 {
     setFlags(ItemIsMovable | ItemIsSelectable);
     setAcceptHoverEvents(true);
 }
 
 QRectF Node::boundingRect() const {
-    return QRectF(-10, -10, 120, minHeaderHeight+minBodyHeight);
+    return QRectF(-10, -10, 150, minHeaderHeight+minBodyHeight);
 }
 
 void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
@@ -37,71 +40,69 @@ void Node::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
 
 void Node::addInputExecutionPin(int n)
 {
-    ExecutionPin* inputPin = new ExecutionPin(Pin::Direction::Input, this);
-    
-    inputPin->setPos(getFirstInputPinPos());
-    lastInputPinPos = getFirstInputPinPos(); 
+    lastInputPinPos = getFirstInputPinPos();
+    QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("execution").arg("input").arg(0);
+    ExecutionPin* inputPin = new ExecutionPin("", Pin::Direction::Input, this);
+    inputPin->setId(pinId);
+    inputPin->setPos(lastInputPinPos);
     inputExecPin = inputPin;
+    inputExecutionPins.push_back(inputExecPin);
+
+    for(int i=1; i<n; i++){
+        QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("execution").arg("input").arg(i);
+        ExecutionPin* inputPin = new ExecutionPin("", Pin::Direction::Input, this);
+        inputPin->setId(pinId);
+        lastInputPinPos.setY(lastInputPinPos.y() + 3 + (inputPin->boundingRect().height()));
+        inputPin->setPos(lastInputPinPos);
+        inputExecPin = inputPin; 
+        inputExecutionPins.push_back(inputPin); 
+    }
 }
 
 void Node::addOutputExecutionPin(int n )
 {
     lastOutputPinPos = getFirstOutputPinPos();
+    QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("execution").arg("output").arg(0);
+    ExecutionPin* outputPin = new ExecutionPin("", Pin::Direction::Output, this);
+    outputPin->setId(pinId);
+    outputPin->setPos(lastOutputPinPos);
+    outputExecPin = outputPin; 
+    outputExecutionPins.push_back(outputPin);
 
-    for(int i=0; i<n; i++){
-        ExecutionPin* outputPin = new ExecutionPin(Pin::Direction::Output, this);
-        
-        outputPin->setPos(lastOutputPinPos);
+    for(int i=1; i<n; i++){
+        QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("execution").arg("output").arg(i);
+        ExecutionPin* outputPin = new ExecutionPin("", Pin::Direction::Output, this);
+        outputPin->setId(pinId);
         lastOutputPinPos.setY(lastOutputPinPos.y() + 3 + (outputPin->boundingRect().height()));
+        outputPin->setPos(lastOutputPinPos);
         outputExecPin = outputPin; 
         outputExecutionPins.push_back(outputPin); 
     }
     
 }
 
-void Node::addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types)
+void Node::addInputPins(const std::vector<QString>& names, const std::vector<DataType>& types, const std::vector<DataPin::VariantType>& defaultVals)
 {
     const int spacing = 20;
     QRectF rect = boundingRect();
     
     QPointF startPos = lastInputPinPos;
-    if (inputExecPin) {
-        
-        startPos = inputExecPin->pos();
-        startPos.setY(startPos.y() + inputExecPin->boundingRect().height() + 5);
-       
-    } else {
-        
-        startPos = QPointF(rect.left(), rect.top());
-        startPos.setX(startPos.x() + 10); 
-        startPos.setY(startPos.y() + minHeaderHeight + 10);
-        
-    }
-
+    if (!inputExecPin) {
+        lastInputPinPos = getFirstInputPinPos();   
+    } 
+    
     for (int i = 0; i < types.size(); ++i)
     {
-        DataPin *pin; 
-        if(types[i] == DataType::Boolean){
-            pin = new DataPin(names[i], types[i], false, Pin::Direction::Input, this);
-        }else{
-            pin = new DataPin(names[i], types[i], 5.0f, Pin::Direction::Input, this);
-        }
-        
-        qreal x = lastInputPinPos.x();
-        qreal y = lastInputPinPos.y() + spacing;
-
-        pin->setPos(x, y);
+        QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("data").arg("input").arg(i);
+        DataPin* pin = new DataPin(names[i], types[i], defaultVals[i], Pin::Direction::Input, this);
+        pin->setId(pinId);         
+        lastInputPinPos.setY(lastInputPinPos.y() + spacing);
+        pin->setPos(lastInputPinPos);
         inputPins.push_back(pin);
-        lastInputPinPos = QPointF(x, y);
-
-        QGraphicsTextItem* label = new QGraphicsTextItem(names[i], this);
-        label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
-        label->setDefaultTextColor(Qt::white); 
-        label->setPos(x + pin->boundingRect().width() + 0.1, y - label->boundingRect().height() / 2);
     }
 }
 
-void Node::addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types)
+void Node::addOutputPins(const std::vector<QString>& names, const std::vector<DataType>& types, const std::vector<DataPin::VariantType>& defaultVals)
 {
     const int spacing = 20;
     QRectF rect = boundingRect();
@@ -113,17 +114,13 @@ void Node::addOutputPins(const std::vector<QString>& names, const std::vector<Da
 
     for (int i = 0; i < types.size(); ++i)
     {
-        DataPin* pin = new DataPin(names[i], types[i], 0.0f, Pin::Direction::Output, this);        
+        QString pinId = QString("%1_%2_%3_%4").arg(getId()).arg("data").arg("output").arg(i);
+        DataPin* pin = new DataPin(names[i], types[i], defaultVals[i], Pin::Direction::Output, this); 
+        pin->setId(pinId);        
         lastOutputPinPos.setY(lastOutputPinPos.y() + spacing);
-
         pin->setPos(lastOutputPinPos);
         outputPins.push_back(pin);
-
-        QGraphicsTextItem* label = new QGraphicsTextItem(names[i], this);
-        label->setFlag(QGraphicsItem::ItemIgnoresTransformations, false);
-        label->setDefaultTextColor(Qt::white); 
-        label->setPos(lastOutputPinPos.x() - pin->boundingRect().width() - label->boundingRect().width(), lastOutputPinPos.y() - label->boundingRect().height() / 2);
-    }
+        }
 }
 
 
@@ -152,3 +149,33 @@ QPointF Node::getFirstOutputPinPos()
     return rightUpperCorner;
 }
 
+std::vector<Pin*> Node::getAllPins() const {
+
+    std::vector<Pin*> allPins;
+    allPins.insert(allPins.end(), inputExecutionPins.begin(), inputExecutionPins.end());
+    allPins.insert(allPins.end(), outputExecutionPins.begin(), outputExecutionPins.end());
+    allPins.insert(allPins.end(), inputPins.begin(), inputPins.end());
+    allPins.insert(allPins.end(), outputPins.begin(), outputPins.end());
+
+    return allPins;
+}
+
+
+std::vector<Pin*> Node::getInputPins() const {
+
+    std::vector<Pin*> inputs;
+    inputs.insert(inputs.end(), inputExecutionPins.begin(), inputExecutionPins.end());
+    inputs.insert(inputs.end(), inputPins.begin(), inputPins.end());
+
+    return inputs;
+}
+
+
+std::vector<Pin*> Node::getOutputPins() const {
+
+    std::vector<Pin*> outputs;
+    outputs.insert(outputs.end(), outputExecutionPins.begin(), outputExecutionPins.end());
+    outputs.insert(outputs.end(), outputPins.begin(), outputPins.end());
+
+    return outputs;
+}
