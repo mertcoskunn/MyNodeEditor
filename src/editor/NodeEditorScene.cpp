@@ -28,6 +28,12 @@ NodeEditorScene::NodeEditorScene(QObject* parent)
 }
 
 
+void NodeEditorScene::clearNodeList()
+{
+    nodeList.clear();
+    this->clear();
+}
+
 void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 {
     Q_UNUSED(event);

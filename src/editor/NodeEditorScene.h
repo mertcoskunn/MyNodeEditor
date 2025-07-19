@@ -15,7 +15,7 @@ class NodeEditorScene : public QGraphicsScene
 public:
     NodeEditorScene(QObject* parent = nullptr);
     std::vector<Node*> getNodeList(){ return nodeList; };
-    void clearNodeList(){ nodeList.clear(); }; 
+    void clearNodeList(); 
     StartNode* getStartNode(){return startNode;} ; 
     void setStartNode(StartNode* node){startNode = node;} ;
     std::vector<Node*> nodeList; 
