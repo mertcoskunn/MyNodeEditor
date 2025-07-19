@@ -23,19 +23,13 @@ void ConnectionLine::updateLine() {
     }
 }
 
-
-void ConnectionLine::mousePressEvent(QGraphicsSceneMouseEvent* event)
+ConnectionLine::~ConnectionLine()
 {
-    if (event->modifiers() & Qt::ControlModifier && event->button() == Qt::LeftButton) {
-        
-        this->getNextPin()->setLine(nullptr);
-        this->getStartPin()->setLine(nullptr);
-        scene()->removeItem(this);  
-        return; 
-    }
-    
-    QGraphicsItem::mousePressEvent(event);
-}
+    if (startPin)
+        startPin->setLine(nullptr);
 
+    if (nextPin)
+        nextPin->setLine(nullptr);
+}
 
 

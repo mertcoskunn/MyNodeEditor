@@ -12,6 +12,7 @@ class ConnectionLine : public QObject, public QGraphicsLineItem
 
 public:
     ConnectionLine(Pin* from, Pin* to);
+    ~ConnectionLine();
 
     Pin* getNextPin(){return endPin;};
     Pin* getStartPin(){return startPin;}; 
