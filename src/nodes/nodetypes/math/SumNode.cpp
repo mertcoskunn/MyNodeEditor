@@ -54,22 +54,5 @@ void SumNode::executeImpl()
     {
         float result = std::get<float>(val1) + std::get<float>(val2);
         outputPins[0]->setValue(result);
-        qDebug() << result; 
-        qDebug() << std::get<float>(val2); 
-       /*
-        auto outPin = outputPins[0];
-        if (outPin)
-        {
-            auto line = outPin->getLine();
-            if (line)
-            {
-                Pin* nextPin = line->getNextPin();
-                if (auto tempPin = dynamic_cast<DataPin*>(nextPin))
-                {
-                    tempPin->setValue(result);
-                }
-            }
-        }
-    */
     }
 }

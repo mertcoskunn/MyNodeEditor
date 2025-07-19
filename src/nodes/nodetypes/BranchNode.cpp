@@ -40,7 +40,6 @@ void BranchNode::executeImpl()
     {
         
         bool val = std::get<bool>(val1); 
-        qDebug()<< val;
         if(val)
             setActiveOutputExecutionPin(outputExecutionPins[0]); 
         else

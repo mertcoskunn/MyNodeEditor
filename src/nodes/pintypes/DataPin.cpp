@@ -64,7 +64,6 @@ void DataPin::setupInputBox()
         inputWidget = checkBox;
         QObject::connect(checkBox, &QCheckBox::stateChanged, this, [=](int state){
             setValue(state == Qt::Checked);
-            qDebug() << "Yeni bool değer:" << (state == Qt::Checked);
         });
     }else{
     QLineEdit* inputBox = new QLineEdit;
@@ -97,7 +96,6 @@ void DataPin::setupInputBox()
     
     QObject::connect(inputBox, &QLineEdit::textChanged, [=](const QString& val){
         setValue(val.toFloat()); 
-        qDebug() << "Yeni değer:" << val;
     });
 }
 }
@@ -147,21 +145,16 @@ QString DataPin::toQString(const VariantType& value) {
 
 DataPin::VariantType DataPin::getValue(){
    
-    qDebug() <<"get Value çalıştı";
     if(!getLine()){
-        qDebug() << "line set değil"; 
         return value;
         }
     if(getDirection() == Direction::Output){
         if(!getOwner()->isDirty()){
-            qDebug()<<"is set true";
             return value;
         }
-        qDebug()<<"direction output";
         getOwner()->execute();
         return value; 
     }
-    qDebug()<<"direction input";
     
 
     return dynamic_cast<DataPin*>(getLine()->getStartPin())->getValue();  

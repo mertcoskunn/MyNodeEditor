@@ -41,7 +41,6 @@ void ConstantNode::setupPins()
 
 void ConstantNode::executeImpl()
 {
-    qDebug() << "constant node execute calisti";
     outputPins[0]->setValue(inputPins[0]->getValue());
 }
 
