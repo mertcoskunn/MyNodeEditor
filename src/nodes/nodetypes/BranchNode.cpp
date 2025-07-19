@@ -19,10 +19,16 @@ void BranchNode::setupPins()
         "x",
     };
 
-    std::vector<DataType> inputs = {
+    std::vector<DataType> inputTypes = {
         DataType::Boolean
     };
-    addInputPins(inputNames, inputs);
+
+    std::vector<DataPin::VariantType> inputDefaults = {
+        false
+    };
+
+
+    addInputPins(inputNames, inputTypes, inputDefaults);
 }
 
 

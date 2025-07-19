@@ -24,6 +24,11 @@ void SumNode::setupPins()
         DataType::Float
     };
 
+    std::vector<DataPin::VariantType> inputDefaults = {
+        1.0f,
+        1.0f 
+    };
+
     std::vector<QString> outputNames = {
         "sum"
     };
@@ -32,8 +37,12 @@ void SumNode::setupPins()
         DataType::Float,
     };
 
-    addInputPins(inputNames, inputTypes);
-    addOutputPins(outputNames, outputTypes); 
+    std::vector<DataPin::VariantType> outputDefaults = {
+        1.0f,
+    };
+
+    addInputPins(inputNames, inputTypes, inputDefaults);
+    addOutputPins(outputNames, outputTypes, outputDefaults); 
 }
 
 void SumNode::executeImpl()

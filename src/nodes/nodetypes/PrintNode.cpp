@@ -22,7 +22,12 @@ void PrintNode::setupPins()
     std::vector<DataType> inputs = {
         DataType::Float
     };
-    addInputPins(inputNames, inputs);
+
+    std::vector<DataPin::VariantType> inputDefaults = {
+        ""
+    };
+
+    addInputPins(inputNames, inputs, inputDefaults);
 }
 
 

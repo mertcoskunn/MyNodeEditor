@@ -19,6 +19,10 @@ void ConstantNode::setupPins()
         DataType::Float    
     };
 
+    std::vector<DataPin::VariantType> inputDefaults = {
+        0.0f
+    };
+
     std::vector<QString> outputNames = {
         "" 
     };
@@ -26,8 +30,13 @@ void ConstantNode::setupPins()
     std::vector<DataType> outputTypes = {
         DataType::Float
     };
-    addInputPins(inputNames, inputTypes); 
-    addOutputPins(outputNames, outputTypes); 
+
+    std::vector<DataPin::VariantType> outputDefaults = {
+        0.0f
+    };
+
+    addInputPins(inputNames, inputTypes, inputDefaults); 
+    addOutputPins(outputNames, outputTypes, outputDefaults); 
 }
 
 void ConstantNode::executeImpl()
