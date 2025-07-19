@@ -4,7 +4,9 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 
-class StartNode; 
+class Node; 
+class StartNode;
+
 
 class NodeEditorScene : public QGraphicsScene
 {
@@ -12,12 +14,17 @@ class NodeEditorScene : public QGraphicsScene
 
 public:
     NodeEditorScene(QObject* parent = nullptr);
- 
+    std::vector<Node*> getNodeList(){ return nodeList; };
+    void clearNodeList(){ nodeList.clear(); }; 
+    StartNode* getStartNode(){return startNode;} ; 
+    void setStartNode(StartNode* node){startNode = node;} ;
+    std::vector<Node*> nodeList; 
 
 protected:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent* event) override;
 
 private:
     int numberOfNode;
-    StartNode* startNode; 
+    StartNode* startNode;
+    
 };

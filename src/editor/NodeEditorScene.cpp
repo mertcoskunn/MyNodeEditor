@@ -9,20 +9,22 @@
 #include "../nodes/nodetypes/math/DivisionNode.h"
 #include "../nodes/nodetypes/math/MultiplyNode.h"
 #include "../nodes/nodetypes/math/SubtractionNode.h"
-#include "../nodes/ConnectionLine.h"  
+#include "../nodes/ConnectionLine.h"
+#include "../utils/JsonExporter.h"
+#include "../utils/JsonImporter.h"
+
+#include <QFileInfo>
+#include <QDir>
 
 NodeEditorScene::NodeEditorScene(QObject* parent)
     : QGraphicsScene(parent)
 {
     setSceneRect(-5000, -5000, 10000, 10000);
 
-    //Node* node = new Node();
-    //startNode = node; 
-    //addItem(node);
-
     StartNode* node = new StartNode();
     startNode = node; 
     addItem(node);
+    nodeList.push_back(node);
 }
 
 
@@ -51,6 +53,7 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             addItem(node);
 
             numberOfNode++; 
+            nodeList.push_back(node); 
             qDebug() << "New node added"; 
         }
 
@@ -60,7 +63,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node);
             qDebug() << "New node added"; 
         }
 
@@ -70,7 +74,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node);
             qDebug() << "New node added"; 
         }
 
@@ -80,7 +85,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node); 
             qDebug() << "New node added"; 
         }
 
@@ -90,7 +96,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node);
             qDebug() << "New node added"; 
         }
 
@@ -100,7 +107,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node); 
             qDebug() << "New node added"; 
         }
 
@@ -110,7 +118,8 @@ void NodeEditorScene::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
             node->setPos(event->scenePos());
             addItem(node);
 
-            numberOfNode++; 
+            numberOfNode++;
+            nodeList.push_back(node); 
             qDebug() << "New node added"; 
         }
 
