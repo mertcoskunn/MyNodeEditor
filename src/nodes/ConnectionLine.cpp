@@ -28,8 +28,8 @@ ConnectionLine::~ConnectionLine()
     if (startPin)
         startPin->setLine(nullptr);
 
-    if (nextPin)
-        nextPin->setLine(nullptr);
+    if (endPin)
+        endPin->setLine(nullptr);
 }
 
 
